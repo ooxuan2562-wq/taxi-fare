@@ -158,6 +158,15 @@ function initMap(){
 
 function calculateFare(){
 
+    alert(
+      directionsService
+      ? "Directions OK"
+      : "Directions 壞了"
+    );
+
+    const origin =
+        document.getElementById('origin').value;
+
     const origin =
         document.getElementById('origin').value;
 
