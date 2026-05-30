@@ -222,11 +222,8 @@ directionsService.route({
 
             const min =
     Math.ceil(
-        (
-            leg.duration_in_traffic
-                ? leg.duration_in_traffic.value
-                : leg.duration.value
-        ) / 60
+        leg.duration.value / 60
+    );
     );
 
             let fare =
