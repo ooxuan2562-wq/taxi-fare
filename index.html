@@ -147,8 +147,6 @@ id="avoidHighways">
 
 <script>
 
-alert("JS已載入");
-
 let directionsService;
 let copyText = '';
 
@@ -159,12 +157,6 @@ function initMap(){
 }
 
 function calculateFare(){
-
-    alert(
-      directionsService
-      ? "Directions OK"
-      : "Directions 壞了"
-    );
 
     const origin =
         document.getElementById('origin').value;
