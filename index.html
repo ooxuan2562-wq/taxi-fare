@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>高雄車資計算</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f5f1eb;
+}
+
+.card{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#5f5248;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#5f5248;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.result{
+    margin-top:20px;
+    background:#faf7f3;
+    padding:15px;
+    border-radius:12px;
+    line-height:1.8;
+}
+
+.route-card{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:12px;
+}
+
+.option{
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+.option label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>派車車資計算 Pro</h1>
+
+<input
+id="origin"
+placeholder="上車地點或店名">
+
+<input
+id="destination"
+placeholder="下車地點或店名">
+
+<div class="option">
+<label>
+<input
+type="checkbox"
+id="avoidHighways">
+避開國道／高速公路
+</label>
+</div>
+
+<button onclick="calculateFare()">
+計算車資
+</button>
+
+<button onclick="copyResult()">
+一鍵複製報價
+</button>
+
+<div class="result" id="result">
+請輸入起點與終點
+</div>
+
+</div>
+
+<script>
+
+let directionsService;
+let copyText = '';
+
+function initMap(){
+
+    directionsService =
+        new google.maps.DirectionsService();
+
+    new google.maps.places.Autocomplete(
+        document.getElementById('origin')
+    );
+
+    new google.maps.places.Autocomplete(
+        document.getElementById('destination')
+    );
+}
+
+function calculateFare(){
+
+    const origin =
+        document.getElementById('origin').value;
+
+    const destination =
+        document.getElementById('destination').value;
+
+    const avoidHighways =
+        document.getElementById('avoidHighways').checked;
+
+    if(!origin || !destination){
+
+        alert('請輸入地點');
+        return;
+    }
+
+    directionsService.route({
+
+        origin: origin,
+
+        destination: destination,
+
+        travelMode:
+            google.maps.TravelMode.DRIVING,
+
+        provideRouteAlternatives: true,
+
+        avoidHighways: avoidHighways
+
+    }, function(result, status){
+
+        if(status !== 'OK'){
+
+            alert('找不到路線');
+            return;
+        }
+
+        let html = '';
+
+        copyText =
+`${origin} → ${destination}
+
+`;
+
+        result.routes.forEach((routeData,index)=>{
+
+            const leg =
+                routeData.legs[0];
+
+            const km =
+                leg.distance.value / 1000;
+
+            const min =
+                leg.duration.value / 60;
+
+            let fare =
+                50 +
+                (km * 20) +
+                (min * 2);
+
+            fare =
+                Math.max(
+                    100,
+                    Math.round(fare)
+                );
+
+            html += `
+            <div class="route-card">
+
+                <b>路線 ${index + 1}</b><br>
+
+                🚕 距離：
+                ${km.toFixed(1)} km
+                <br>
+
+                🕒 時間：
+                ${Math.round(min)} 分鐘
+                <br>
+
+                💰 車資：
+                ${fare} 元
+
+            </div>
+            `;
+
+            copyText +=
+`路線 ${index + 1}
+距離：${km.toFixed(1)} km
+時間：${Math.round(min)} 分鐘
+車資：${fare} 元
+
+`;
+        });
+
+        document.getElementById('result').innerHTML =
+            html;
+
+    });
+}
+
+function copyResult(){
+
+    if(!copyText){
+
+        alert('請先計算車資');
+        return;
+    }
+
+    navigator.clipboard.writeText(copyText);
+
+    alert('已複製報價');
+}
+
+</script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArRsZhKT9193bVq5bFn1JIpABR8y9UTLA&libraries=places&callback=initMap">
+</script>
+
+</body>
+</html>
