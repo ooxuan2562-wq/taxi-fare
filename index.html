@@ -181,21 +181,25 @@ function calculateFare(){
         return;
     }
 
-    directionsService.route({
+directionsService.route({
 
-        origin: origin,
+    origin: origin,
 
-        destination: destination,
+    destination: destination,
 
-        travelMode:
-            google.maps.TravelMode.DRIVING,
+    travelMode:
+        google.maps.TravelMode.DRIVING,
 
-        provideRouteAlternatives: true,
+    provideRouteAlternatives: true,
 
-        avoidHighways: avoidHighways
+    avoidHighways: avoidHighways,
 
-    }, function(result, status){
+    drivingOptions: {
+        departureTime: new Date(),
+        trafficModel: 'bestguess'
+    }
 
+}, function(result, status){
         if(status !== 'OK'){
 
             alert('找不到路線');
@@ -219,10 +223,13 @@ function calculateFare(){
         leg.distance.value / 1000
     );
 
-            const min =
-    Math.ceil(
-        leg.duration.value / 60
-    );
+            const duration =
+    leg.duration_in_traffic
+        ? leg.duration_in_traffic.value
+        : leg.duration.value;
+
+const min =
+    Math.ceil(duration / 60);
 
             let fare =
                 50 +
