@@ -191,10 +191,6 @@ directionsService.route({
 
     avoidHighways: avoidHighways,
 
-    drivingOptions: {
-        departureTime: new Date(),
-        trafficModel: 'bestguess'
-    }
 
 }, function(result, status){
         if(status !== 'OK'){
@@ -223,7 +219,6 @@ directionsService.route({
             const min =
     Math.ceil(
         leg.duration.value / 60
-    );
     );
 
             let fare =
