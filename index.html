@@ -215,13 +215,10 @@ directionsService.route({
         leg.distance.value / 1000
     );
 
-            const duration =
-    leg.duration_in_traffic
-        ? leg.duration_in_traffic.value
-        : leg.duration.value;
-
-const min =
-    Math.ceil(duration / 60);
+            const min =
+    Math.ceil(
+        leg.duration.value / 60
+    );
 
             let fare =
                 50 +
@@ -240,7 +237,7 @@ const min =
                 <b>路線 ${index + 1}</b><br>
 
                 🚕 距離：
-                ${km.toFixed(1)} km
+                ${km} km
                 <br>
 
                 🕒 時間：
@@ -267,7 +264,6 @@ const min =
 
     });
 }
-
 function copyResult(){
 
     if(!copyText){
@@ -281,10 +277,11 @@ function copyResult(){
     alert('已複製報價');
 }
 
+</script>
+
 <script async defer
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4e4zItnQaRM4cepcImb4vrjil4SmPFkk&callback=initMap">
 </script>
-
 
 </body>
 </html>
