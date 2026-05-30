@@ -112,7 +112,7 @@ white-space:nowrap;
 
 <div class="card">
 
-<h1>派車車資計算 Pro</h1>
+<h>高雄車資計算</h1>
 
 <input
 id="origin"
@@ -215,10 +215,14 @@ function calculateFare(){
                 routeData.legs[0];
 
             const km =
-                leg.distance.value / 1000;
+    Math.ceil(
+        leg.distance.value / 1000
+    );
 
             const min =
-                leg.duration.value / 60;
+    Math.ceil(
+        leg.duration.value / 60
+    );
 
             let fare =
                 50 +
@@ -226,10 +230,10 @@ function calculateFare(){
                 (min * 2);
 
             fare =
-                Math.max(
-                    100,
-                    Math.round(fare)
-                );
+                Math.max(100, fare);
+                    
+                    
+                
 
             html += `
             <div class="route-card">
