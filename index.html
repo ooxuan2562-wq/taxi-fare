@@ -154,14 +154,6 @@ function initMap(){
 
     directionsService =
         new google.maps.DirectionsService();
-
-    new google.maps.places.Autocomplete(
-        document.getElementById('origin')
-    );
-
-    new google.maps.places.Autocomplete(
-        document.getElementById('destination')
-    );
 }
 
 function calculateFare(){
@@ -289,10 +281,8 @@ function copyResult(){
     alert('已複製報價');
 }
 
-</script>
 <script async defer
-src="https://maps.googleapis.com/maps/api/js?key=
-AIzaSyB4e4zItnQaRM4cepcImb4vrjil4SmPFkk&libraries=places&callback=initMap">
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4e4zItnQaRM4cepcImb4vrjil4SmPFkk&callback=initMap">
 </script>
 
 
